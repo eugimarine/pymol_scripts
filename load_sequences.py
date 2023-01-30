@@ -1,7 +1,7 @@
 from pymol import cmd
 
 
-def load_sequences(file, n_sequences):
+def load_sequences(file, n_sequences='(all)'):
     """ file should be in the format of:
     [SEQUENCE]  [SUBUNIT]   [START]     [END]
     tab separated values"""
