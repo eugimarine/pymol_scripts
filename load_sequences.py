@@ -1,12 +1,13 @@
 from pymol import cmd
 
 
+
 def load_sequences(file, n_sequences='(all)'):
     """ file should be in the format of:
     [SEQUENCE]  [SUBUNIT]   [START]     [END]
     tab separated values"""
-    i = 0
     with open(file) as f:
+        i = 0
         for line in f:
             i += 1
             seq, chain, start, end = line.split()
