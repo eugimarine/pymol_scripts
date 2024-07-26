@@ -1,29 +1,25 @@
 from pymol import cmd
 
-def extract_contact_points(file_path, sep='\t'):
+rnames_chains_coverter_6I7O_r1 = {'rrna28s': 'BQ', 'rrna18s': '2b', 'rrna5s': 'BR', 'rrna58s': 'BS'}
+rnames_chains_coverter_6I7O_r2 = {'rrna28s': 'YQ', 'rrna18s': '2', 'rrna5s': 'YR', 'rrna58s': 'YS'}
+rnames_chains_coverter_4UG0 = {'rrna28s': 'L5', 'rrna18s': 'S2', 'rrna5s': 'L7', 'rrna58s': 'L8'}
+
+
+def rrna28s_contact_points(file_path, color, sep=','):
     """ extract contact point from a file in the following format:
-    [COUNTS]    [CHAIN_1]   [RESIDUE NUM]   [CHAIN_2]   [RESIDUE NUM]
+    [RESIDUE NUM]  ,  [CLOSE PROTEIN]
     default separator tab
     USAGE:
-    extract_contact_points file_path, separator(='\t' default)
+    extract_contact_points file_path, separator(=',' default)
     """
 
-    rnames_chains_coverter = {'rrna28s':'L5', 'rrna18s':'S2', 'rrna5s': 'L7' ,'rrna58s': 'L8'}
     with open(file_path) as f:
         data = [line.strip().rsplit(sep) for line in f if len(line) > 2]
     for cp in data:
-        b_val = int(cp[0])
-        chain_1 = rnames_chains_coverter[cp[1]]
-        resi_1 = cp[2]
-        chain_2 = rnames_chains_coverter[cp[3]]
-        resi_2 = cp[4]
-        selection_name = chain_1+'-'+resi_1+'_'+chain_2+'-'+resi_2
-        cmd.select(selection_name, f'(chain {chain_1} & resi {resi_1}) | (chain {chain_2} & resi {resi_2})')
-        cmd.do(f'alter {selection_name} ,b={b_val}')
+        resi = cp[0]
+        selection_name = 'cp_'+resi + '_' + cp[1]
+        cmd.select(selection_name, f'chain L5 & resi {resi}')
+        cmd.do(f'color {color},  {selection_name}')
 
-cmd.extend('extract_contact_points', extract_contact_points)
+cmd.extend('rrna28s_contact_points', rrna28s_contact_points)
 
-def spectrum_frequency_contact_points(selection, spectrum='yellow_white_red'):
-    cmd.spectrum('b', spectrum, selection)
-
-cmd.extend('heatmap_frequency_contact_points', spectrum_frequency_contact_points)
