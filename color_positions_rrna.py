@@ -9,7 +9,7 @@ color_palette = ['red', 'orange', 'yellow', 'limegreen', 'cyan', 'marine', 'mage
 
 model = {'4ug0': rnames_chains_coverter_4UG0, '6i7o': rnames_chains_coverter_6I7O_r1}
 
-def read_csv_data(path, data_col, rname, cb_name='color_bar', spect_color="rainbow", mod="4ug0"):
+def read_csv_data(path, data_col, rname, cb_name='color_bar', spect_color="rainbow"):
     '''
     :param path: path to tsv (tab separeted values) file with sequences
     :param sel_name_col: column with the selection name
@@ -18,9 +18,9 @@ def read_csv_data(path, data_col, rname, cb_name='color_bar', spect_color="rainb
     '''
     pos_name = 'pos'
     chain_col = 'rname'
-    rnames_conv = model[mod]
+    # rnames_conv = model[mod]
     df = pd.read_csv(path)
-    df[chain_col] = df[chain_col].map(rnames_conv)
+    # df[chain_col] = df[chain_col].map(rnames_conv)
     max_val = df[data_col].max()
     min_val = df[data_col].min() 
     cmd.do(f'alter all, b=0')
@@ -28,7 +28,7 @@ def read_csv_data(path, data_col, rname, cb_name='color_bar', spect_color="rainb
         b_val = str(row[1][data_col])
         pos = str(row[1][pos_name])
         chain = row[1][chain_col]
-        cmd.do(f'alter chain {chain} & resi {pos} ,b={b_val}')
+        cmd.do(f'alter {chain} & resi {pos} ,b={b_val}')
     cmd.do(f'spectrum b, rainbow, {rname}')
     # cmd.do(f'spectrum b, {spect_color}')
     # cmd.do(f"color yellow, chain {rnames_conv['trna']}")
