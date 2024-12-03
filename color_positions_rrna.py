@@ -37,9 +37,7 @@ def read_csv_data(path, data_col, rname, cb_name='color_bar', spect_color="rainb
     cmd.do(f"ramp_new {cb_name}, , [{min_val},{max_val}], {spect_color} ")
 
 def highlight_positions(path, color='red', rep='sphere', n='all', label='counts', mod="4ug0"):
-    rnames_conv = model[mod]
     df = pd.read_csv(path)
-    df['rname'] = df['rname'].map(rnames_conv)
     for i,row in df.iterrows():
         rname = row.rname
         if n != 'all' and i > int(n):
